@@ -1,0 +1,60 @@
+name: AWS Nuke
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: false
+        default: 'warning'
+  schedule:
+    - cron:  '33 3 * * *'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-west-2
+      URL: https://github.com/rebuy-de/aws-nuke/releases/download/v2.25.0/aws-nuke-v2.25.0-linux-amd64.tar.gz
+      OUTPUT: /tmp/aws-nuke/aws-nuke-v2.25.0-linux-amd64.tar.gz
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials (SANDBOX)
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.REDHACKS_TEMP_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.REDHACKS_TEMP_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Check AWS authentication
+        run: aws sts get-caller-identity
+
+      - name: MKDIR
+        run: mkdir /tmp/aws-nuke
+
+      - name: Download aws-nuke
+        run: curl -Ls $URL --output $OUTPUT
+
+      - name: Extract aws-nuke
+        run: tar zxvf $OUTPUT -C /tmp/aws-nuke
+
+      - name: Move aws-nuke to path
+        run: sudo mv /tmp/aws-nuke/aws-nuke-v2.25.0-linux-amd64 /usr/local/bin/aws-nuke
+
+ #     - name: List resource types
+ #       run: aws-nuke resource-types
+
+      - name: Try aws-nuke
+        run: aws-nuke -c ./aws-nuke.yaml --no-dry-run --force --force-sleep 3 | tee aws-nuke.log
+        continue-on-error: true
+
+      - name: Preserve log
+        uses: actions/upload-artifact@v3
+        with:
+          name: aws-nuke.log
+          path: "aws-nuke.log"
+          retention-days: 14
