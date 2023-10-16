@@ -23,8 +23,7 @@ jobs:
           architecture: 'x64'
       
       - name: Build packages with Maven
-        run: mvn --no-transfer-progress -B package pom.xml
-        continue-on-error: true
+        run: mvn --no-transfer-progress -B package
 
       - name: Debug
         run: find .
