@@ -21,7 +21,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           architecture: 'x64'
+      
+      - name: Build packages with Maven
+        run: mvn --no-transfer-progress -B package pom.xml
+        continue-on-error: true
 
       - name: Debug
-        run: java --version
+        run: find .
 
