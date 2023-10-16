@@ -14,3 +14,8 @@ provider "aws" {
 module "networking" {
     source = "./networking"
 }
+
+module "secrets" {
+    source = "./secrets"
+}
+
