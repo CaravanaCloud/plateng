@@ -1,0 +1,19 @@
+name: Deploy Blink on AWS
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+
+    steps:
+      - name: Checkout Blink
+        uses: actions/checkout@v4
+        with:
+          repository: caravanacloud/blink
+
+      - name: Debug
+        run: find .
