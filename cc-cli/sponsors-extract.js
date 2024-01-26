@@ -78,8 +78,6 @@ async function getSponsors() {
   }
 }
 
-
-
 let _action = () => {
     console.log("Extracting sponsors from github to files. ");
     checkAccess().then( 
