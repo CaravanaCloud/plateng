@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@octokit/graphql": "^7.0.2",
     "commander": "^11.1.0"
   }
 }
