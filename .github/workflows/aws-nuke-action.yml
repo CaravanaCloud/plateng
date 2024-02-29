@@ -1,12 +1,7 @@
-name: AWS Nuke
+name: aws-nuke on redhacks-temp account
 
 on:
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'     
-        required: false
-        default: 'warning'
+  workflow_dispatch: {}
   schedule:
     - cron:  '33 3 * * *'
 
